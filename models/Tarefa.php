@@ -12,7 +12,7 @@ use yii\db\Query;
  * @property string $descricao
  * @property string $data_criacao
  * @property string $data_conclusao
- * todo add estado
+ * @property string $estado
  */
 class Tarefa extends ActiveRecord
 {
@@ -30,18 +30,5 @@ class Tarefa extends ActiveRecord
     public static function queryByOwnerId(int $id): Query
     {
         return Tarefa::find()->where(['owner_id' => $id]);
-    }
-
-    public function beforeSave($insert): bool
-    {
-        if (!parent::beforeSave($insert)) {
-            return false;
-        }
-
-        if ($this->isNewRecord) {
-            $this->data_criacao = date("Y-m-d");
-        }
-
-        return true;
     }
 }

@@ -19,7 +19,7 @@ class m240101_000000_create_users_table extends Migration
             'email' => $this->string()->notNull()->unique(),
             'password' => $this->string()->notNull(),
             'auth_key' => $this->string(AUTH_KEY_LENGTH)->notNull()->unique(),
-            'created_at' => $this->date()->notNull()
+            'created_at' => $this->date()->notNull()->defaultExpression('GETDATE()')
         ]);
     }
 

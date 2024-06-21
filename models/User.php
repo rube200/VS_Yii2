@@ -134,7 +134,6 @@ class User extends ActiveRecord implements IdentityInterface
 
         if ($this->isNewRecord) {
             $this->auth_key = Yii::$app->getSecurity()->generateRandomString(AUTH_KEY_LENGTH);
-            $this->created_at = date('Y-m-d');
         }
 
         return true;
