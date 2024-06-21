@@ -14,7 +14,7 @@ class m240101_000000_create_users_table extends Migration
     public function safeUp()
     {
         $this->createTable(User::tableName(), [
-            'id' => $this->primaryKey()->hasProperty('autoIncrement'),
+            'id' => $this->primaryKey(),
             'username' => $this->string()->notNull()->unique(),
             'email' => $this->string()->notNull()->unique(),
             'password' => $this->string()->notNull(),
