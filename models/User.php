@@ -2,38 +2,34 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use Throwable;
+use Yii;
+use yii\base\Exception;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
+
+define("AUTH_KEY_LENGTH", 128);
+
+/**
+ * @property int $id
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ * @property string $authKey
+ */
+class User extends ActiveRecord implements IdentityInterface
 {
-    public $id;
-    public $username;
-    public $password;
-    public $authKey;
-    public $accessToken;
-
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
-
+    public static function tableName(): string
+    {
+        return '{{user}}';
+    }
 
     /**
      * {@inheritdoc}
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        return User::findOne($id);
     }
 
     /**
@@ -41,12 +37,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
+        //not implemented
         return null;
     }
 
@@ -58,13 +49,36 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
-        }
+        return User::findOne(['username' => $username]);
+    }
 
-        return null;
+    /**
+     * Finds user by username
+     *
+     * @param string $email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return User::findOne(['email' => $email]);
+    }
+
+    /**
+     * Registers a user
+     *
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     * @return User|null
+     * @throws Throwable
+     */
+    public static function registerUser($username, $email, $password)
+    {
+        $newUser = new User();
+        $newUser->username = $username;
+        $newUser->email = $email;
+        $newUser->password = $password;
+        return $newUser->insert() ? $newUser : null;
     }
 
     /**
@@ -88,7 +102,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+        return $this->getAuthKey() === $authKey;
     }
 
     /**
@@ -96,9 +110,31 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
      *
      * @param string $password password to validate
      * @return bool if password provided is valid for current user
+     * @throws Exception
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        if (!$password) {
+            return false;
+        }
+
+        $hash = Yii::$app->getSecurity()->generatePasswordHash($password);
+        return Yii::$app->getSecurity()->validatePassword($this->password, $hash);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function beforeSave($insert): bool
+    {
+        if (!parent::beforeSave($insert)) {
+            return false;
+        }
+
+        if ($this->isNewRecord) {
+            $this->setAttribute('authKey', Yii::$app->getSecurity()->generateRandomString(AUTH_KEY_LENGTH));
+        }
+
+        return true;
     }
 }
