@@ -2,13 +2,16 @@
 
 namespace app\controllers;
 
-use Yii;
-use yii\filters\AccessControl;
-use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterForm;
+use app\models\Tarefa;
+use Throwable;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
+use yii\web\Controller;
+use yii\web\Response;
 
 class SiteController extends Controller
 {
@@ -65,7 +68,15 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'dataProvider' => new ActiveDataProvider([
+                'query' => Tarefa::queryByOwnerId(Yii::$app->user->identity->id),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+                'sort' => false
+            ])
+        ]);
     }
 
     /**
@@ -106,6 +117,7 @@ class SiteController extends Controller
      * Register action.
      *
      * @return Response|string
+     * @throws Throwable
      */
     public function actionRegister()
     {
