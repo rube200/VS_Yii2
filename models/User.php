@@ -16,7 +16,7 @@ define("AUTH_KEY_LENGTH", 128);
  * @property string $email
  * @property string $password
  * @property string $auth_key
- * @property Date $created_at
+ * @property string $created_at
  */
 class User extends ActiveRecord implements IdentityInterface
 {
