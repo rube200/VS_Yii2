@@ -18,7 +18,8 @@ class m240101_000000_create_users_table extends Migration
             'username' => $this->string()->notNull()->unique(),
             'email' => $this->string()->notNull()->unique(),
             'password' => $this->string()->notNull(),
-            'authKey' => $this->string(AUTH_KEY_LENGTH)->notNull()->unique()
+            'auth_key' => $this->string(AUTH_KEY_LENGTH)->notNull()->unique(),
+            'created_at' => $this->date()->notNull()
         ]);
     }
 

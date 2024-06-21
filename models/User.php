@@ -15,7 +15,8 @@ define("AUTH_KEY_LENGTH", 128);
  * @property string $username
  * @property string $email
  * @property string $password
- * @property string $authKey
+ * @property string $auth_key
+ * @property Date $created_at
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -94,7 +95,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getAuthKey()
     {
-        return $this->authKey;
+        return $this->auth_key;
     }
 
     /**
@@ -132,7 +133,8 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         if ($this->isNewRecord) {
-            $this->setAttribute('authKey', Yii::$app->getSecurity()->generateRandomString(AUTH_KEY_LENGTH));
+            $this->auth_key = Yii::$app->getSecurity()->generateRandomString(AUTH_KEY_LENGTH);
+            $this->created_at = date('Y-m-d');
         }
 
         return true;
