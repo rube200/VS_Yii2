@@ -51,6 +51,7 @@ $config = [
         ],
         */
     ],
+    'name' => "Gestor de tarefas",
     'params' => $params,
 ];
 
