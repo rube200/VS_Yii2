@@ -21,7 +21,7 @@ class m240102_000000_create_tarefas_table extends Migration
             'descricao' => $this->string()->notNull(),
             'data_criacao' => $this->date()->notNull()->defaultExpression('GETDATE()'),
             'data_conclusao' => $this->date()->null(),
-            'estado' => $this->string()->notNull()->check('estado IN(\'Pedente\', \'Em Curso\', \'Finalizado\')')->defaultValue('Pedente'),
+            'estado' => $this->string()->notNull()->check('estado IN(\'Pendente\', \'Em Curso\', \'Finalizado\')')->defaultValue('Pendente'),
         ]);
 
         $this->addForeignKey(
