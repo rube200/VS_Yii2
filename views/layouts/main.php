@@ -63,7 +63,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <main id="main" class="flex-shrink-0" role="main">
     <div class="container">
         <?= Alert::widget() ?>
+        <?php if (!empty($this->params['should_center']) && $this->params['should_center']): ?>
+        <div class="d-flex justify-content-center">
+            <?= $content ?>
+        </div>
+        <?php else: ?>
         <?= $content ?>
+        <?php endif ?>
     </div>
 </main>
 
