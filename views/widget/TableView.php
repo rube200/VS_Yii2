@@ -14,9 +14,10 @@ class TableView extends GridView
      */
     public function run()
     {
+        parent::run();
+
         $view = $this->getView();
         $id = $this->options['id'];
-        parent::run();
 
         //this checks if footer is array and converts it to string
         $footerContent = is_array($this->footer) ? implode("\n", $this->footer) : $this->footer;

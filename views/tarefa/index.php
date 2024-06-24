@@ -5,8 +5,8 @@
 
 use yii\bootstrap5\Html;
 use yii\grid\ActionColumn;
-use yii\grid\GridView;
 use yii\helpers\Url;
+use app\views\widget\TableView;
 
 $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
 ?>
@@ -14,7 +14,7 @@ $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
-        <?= GridView::widget([
+        <?= TableView::widget([
             'columns' => [
                 [
                     'attribute' => 'titulo',
@@ -76,19 +76,16 @@ $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
             'dataProvider' => $dataProvider,
             'emptyText' => 'Nenhuma tarefa encontrada',
             'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => '-'],
+            'footer' => Html::a(
+                Html::tag('b', '+ Adicionar'),
+                ['create'],
+                ['class' => 'btn btn-outline-primary']
+            ),
             'headerRowOptions' => ['class' => 'align-middle text-center', 'style' => 'font-size: 17px; height: 50px'],
             'layout' => "{items}\n{pager}",
             'options' => ['class' => 'border grid-view px-0 rounded shadow'],
             'rowOptions' => ['class' => 'align-middle'],
             'tableOptions' => ['class' => 'mb-0 table table-hover table-striped']
         ]); ?>
-
-        <div class="d-flex justify-content-end px-0 py-1">
-            <?= Html::a(
-                Html::tag('b', '+ Adicionar'),
-                ['create'],
-                ['class' => 'btn btn-outline-primary']
-            ) ?>
-        </div>
     </div>
 </div>
