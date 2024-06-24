@@ -5,8 +5,23 @@
 
 use app\views\widget\TableView;
 use yii\bootstrap5\Html;
+use yii\helpers\Url;
 
 $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
+
+function createRedirectButton($text, $icon, $color, $url): string
+{
+     return Html::a(
+        Html::tag('i', '',
+        ['class' => 'bi ' . $icon]) . $text,
+        $url,
+        [
+            'class' => 'btn btn-outline-' . $color . ' ms-2 py-1 text-nowrap',
+            'style' => 'font-size: 14px'
+        ]
+    );
+}
+
 ?>
 <div class="site-index">
     <h1><?= Html::encode($this->title) ?></h1>
@@ -16,7 +31,7 @@ $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
             'columns' => [
                 [
                     'attribute' => 'titulo',
-                    'contentOptions' => ['class' => 'col-1'],
+                    'contentOptions' => ['class' => 'col'],
                     'format' => 'text',
                     'label' => 'Título da tarefa',
 
@@ -68,9 +83,9 @@ $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
             'dataProvider' => $dataProvider,
             'emptyText' => 'Nenhuma tarefa encontrada',
             'footer' => [
-                    '<button class="btn btn-outline-danger py-1 text-nowrap" style="font-size: 14px"><i class="bi bi-trash"></i> Eliminar</button>',
-                    '<button class="btn btn-outline-info ms-2 py-1 text-nowrap" style="font-size: 14px"><i class="bi bi-pencil"></i> Editar</button>',
-                    '<button class="btn btn-outline-primary ms-2 py-1 text-nowrap" style="font-size: 14px"><i class="bi bi-plus-lg"></i> Adicionar</button>'
+                createRedirectButton(' Eliminar', 'bi-trash', 'danger', Url::to(['/site/delete-tarefa'])),
+                createRedirectButton(' Editar', 'bi-pencil', 'info', Url::to(['/site/edit-tarefa'])),
+                createRedirectButton(' Adicionar', 'bi-plus-lg', 'primary', Url::to(['/site/create-tarefa'])),
             ],
             'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => ''],
             'headerRowOptions' => ['class' => 'align-middle text-center', 'style' => 'font-size: 17px; height: 50px'],
