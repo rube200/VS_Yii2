@@ -4,12 +4,11 @@ namespace app\controllers;
 
 use app\models\LoginForm;
 use app\models\RegisterForm;
-use app\models\Tarefa;
 use Throwable;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\Response;
 
@@ -33,6 +32,10 @@ class SiteController extends Controller
                         'actions' => ['index', 'logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['captcha', 'error'],
+                        'allow' => true
                     ],
                 ],
             ],
@@ -64,19 +67,12 @@ class SiteController extends Controller
     /**
      * Displays homepage.
      *
-     * @return string
+     * @return Response
      */
     public function actionIndex()
     {
-        return $this->render('index', [
-            'dataProvider' => new ActiveDataProvider([
-                'query' => Tarefa::queryByOwnerId(Yii::$app->user->identity->id),
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
-                'sort' => false
-            ])
-        ]);
+        $url = Url::toRoute('/tarefa2/index');
+        return $this->redirect($url);
     }
 
     /**
