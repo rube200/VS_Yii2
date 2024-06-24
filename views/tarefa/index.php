@@ -79,7 +79,10 @@ $this->title = 'Tarefas de ' . Yii::$app->user->identity->username;
             'footer' => Html::a(
                 Html::tag('b', '+ Adicionar'),
                 ['create'],
-                ['class' => 'btn btn-outline-primary']
+                [
+                    'class' => 'btn btn-outline-primary py-1',
+                    'style' => 'font-size: 14px',
+                ]
             ),
             'headerRowOptions' => ['class' => 'align-middle text-center', 'style' => 'font-size: 17px; height: 50px'],
             'layout' => "{items}\n{pager}",

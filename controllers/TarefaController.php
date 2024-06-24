@@ -105,16 +105,17 @@ class TarefaController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = Tarefa::findById($id);
         if ($this->request->isPost) {
             $form = new TarefaForm();
-            if ($form->load($this->request->post()) && $form->edit($id)) {
-                return $this->redirect(['view', 'id' => $id]);
+            if ($form->load($this->request->post(), 'Tarefa')) {
+                if ($form->edit($id)) {
+                    return $this->redirect(['view', 'id' => $id]);
+                }
             }
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'model' => Tarefa::findById($id)
         ]);
     }
 
