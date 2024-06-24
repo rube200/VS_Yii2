@@ -71,7 +71,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $url = Url::toRoute('/tarefa2/index');
+        $url = Url::toRoute('/tarefa/index');
         return $this->redirect($url);
     }
 
