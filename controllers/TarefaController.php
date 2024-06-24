@@ -100,15 +100,17 @@ class TarefaController extends Controller
      * Updates an existing Tarefa model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id
-     * @return string|\yii\web\Response
+     * @return string|Response
      * @throws Exception
      */
     public function actionUpdate($id)
     {
         $model = Tarefa::findById($id);
-
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+            $form = new TarefaForm();
+            if ($form->load($this->request->post()) && $form->edit($id)) {
+                return $this->redirect(['view', 'id' => $id]);
+            }
         }
 
         return $this->render('update', [
