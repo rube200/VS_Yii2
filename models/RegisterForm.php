@@ -19,6 +19,8 @@ class RegisterForm extends Model
     public $password;
     /** @noinspection PhpUnused */
     public $confirm_password;
+    /** @noinspection PhpUnused */
+    public $verifyCode;
 
     /**
      * @return array the validation rules.
@@ -32,6 +34,17 @@ class RegisterForm extends Model
             [['username', 'email'], 'unique', 'targetClass' => User::class],
             ['password', 'string', 'length' => [3, 255]],
             ['confirm_password', 'compare', 'compareAttribute' => 'password', 'message' => "Passwords don't match"],
+            ['verifyCode', 'captcha'],
+        ];
+    }
+
+    /**
+     * @return array customized attribute labels
+     */
+    public function attributeLabels()
+    {
+        return [
+            'verifyCode' => 'Verification Code',
         ];
     }
 

@@ -7,6 +7,7 @@
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+use yii\captcha\Captcha;
 
 $this->title = 'Register';
 $this->params['breadcrumbs'][] = $this->title;
@@ -36,9 +37,16 @@ $this->params['should_center'] = true;
 
         <?= $form->field($model, 'confirm_password')->passwordInput(['autocomplete' => true]) ?>
 
+        <?= $form->field($model, 'verifyCode')->widget(Captcha::class, [
+            'template' => Html::tag('div',
+            Html::tag('div', '{image}', ['class' => 'col-lg-3']) .
+            Html::tag('div', '{input}', ['class' => 'col-lg-6']),
+            ['class' => 'justify-content-evenly row']),
+        ]) ?>
+
         <div class="form-group">
             <div>
-                <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'name' => 'Register-button']) ?>
+                <?= Html::submitButton('Register', ['class' => 'btn btn-primary', 'name' => 'register-button']) ?>
             </div>
         </div>
 
