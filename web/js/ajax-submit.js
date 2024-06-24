@@ -39,7 +39,7 @@ $form.on('beforeSubmit', function() {
         dataType: 'json',
 
         success: (e) => {
-            console.log(e);
+            console.log("Success" + e);
         },
 
     });
